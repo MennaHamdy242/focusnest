@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#17152b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FocusNest" />
+  <meta name="description" content="A mobile-first todo list and personal notebook with local image and audio attachments." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <title>FocusNest — Todo + Notebook</title>
+</head>
+<body>
+  <div class="splash-screen" id="splashScreen" aria-hidden="true">
+    <div class="splash-logo">✦</div>
+    <strong>FocusNest</strong>
+    <span>your little space to get things done ♡</span>
+  </div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="brand-mark" aria-hidden="true">✦</div>
+        <div>
+          <div class="brand-name">FocusNest</div>
+          <div class="brand-subtitle">Your quiet productivity space</div>
+        </div>
+      </div>
+      <button class="icon-btn" id="installBtn" type="button" hidden aria-label="Install app" title="Install app">⇩</button>
+    </header>
+
+    <main class="main-content">
+      <section class="view active" data-view="home" aria-labelledby="homeTitle">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">HOME</p>
+            <h1 id="homeTitle">Good evening <span aria-hidden="true">👋</span></h1>
+            <p class="muted" id="homeDate"></p>
+          </div>
+          <button class="avatar-btn" id="profileBtn" type="button" aria-label="Open appearance settings">✦</button>
+        </div>
+
+        <div class="stats-grid" id="dashboardStats"></div>
+
+        <section class="welcome-strip" aria-label="Daily vibe">
+          <div class="welcome-mascot"><img src="https://i.pinimg.com/736x/01/84/6a/01846a4dc8c3d6d9f738a638482cb4c0.jpg" alt="Cute bunny" loading="lazy"></div>
+          <div class="welcome-copy"><span class="eyebrow">YOUR LITTLE SPACE</span><strong id="dailyVibe">Soft focus, sharp mind.</strong><small id="dailyVibeSub">Pick one tiny thing and make it happen.</small></div>
+          <div class="streak-pill"><span>✦</span><b id="streakValue">0</b><small>wins</small></div>
+        </section>
+
+        <section class="today-progress card-soft" aria-label="Today progress">
+          <div class="progress-head"><div><span class="eyebrow">TODAY</span><h2>Little steps count ✨</h2></div><strong id="todayProgressValue">0%</strong></div>
+          <div class="progress-track" aria-hidden="true"><span id="todayProgressBar"></span></div>
+          <p class="muted" id="todayProgressText">A fresh page. Add something small.</p>
+        </section>
+
+        <section class="dashboard-feature-grid">
+          <article class="focus-card card-soft">
+            <div class="feature-top"><div><span class="eyebrow">FOCUS MODE</span><h2>One thing at a time ☕</h2></div><span class="feature-badge">25 min</span></div>
+            <div class="focus-timer" id="focusTimer">25:00</div>
+            <div class="timer-ring" aria-hidden="true"><span id="timerRingFill"></span></div>
+            <div class="timer-controls">
+              <button class="btn primary" id="focusStart" type="button">▶ Start</button>
+              <button class="btn" id="focusReset" type="button">↺ Reset</button>
+            </div>
+            <div class="focus-presets" aria-label="Focus duration"><button type="button" data-focus-min="15">15m</button><button class="active" type="button" data-focus-min="25">25m</button><button type="button" data-focus-min="50">50m</button></div>
+            <p class="muted feature-note" id="focusStatus">A tiny focused session is enough.</p>
+          </article>
+
+          <article class="snapshot-card card-soft">
+            <div class="feature-top"><div><span class="eyebrow">YOUR SPACE</span><h2>Little wins ✨</h2></div><span class="sparkle">✦</span></div>
+            <div class="snapshot-list" id="dashboardSnapshot"></div>
+            <div class="quote-box" id="dailyQuote">Small progress is still progress.</div>
+          </article>
+        </section>
+
+        <section class="insight-row" aria-label="Workspace insights">
+          <article class="insight-card"><span class="insight-icon">♡</span><div><small>Completion</small><b id="completionInsight">0%</b></div><span class="mini-bar"><i id="completionMiniBar"></i></span></article>
+          <article class="insight-card"><span class="insight-icon">☕</span><div><small>Focus sessions</small><b id="focusSessionsValue">0</b></div><span class="insight-caption">little pockets of calm</span></article>
+          <article class="insight-card"><span class="insight-icon">✧</span><div><small>Saved</small><b id="savedValue">0</b></div><span class="insight-caption">favorites + pinned</span></article>
+        </section>
+
+        <div class="section-heading">
+          <h2>Today’s Tasks</h2>
+          <button class="text-btn" data-route="tasks">View all</button>
+        </div>
+        <div id="dashboardTasks" class="stack-list"></div>
+
+        <div class="section-heading">
+          <h2>Recent Notes</h2>
+          <button class="text-btn" data-route="notes">Open notebook</button>
+        </div>
+        <div id="dashboardNotes" class="notes-grid compact"></div>
+
+        <section class="quick-actions-wrap">
+          <div class="section-heading"><h2>Quick little things</h2><span class="soft-label">made for you</span></div>
+          <div class="quick-actions">
+            <button class="quick-action primary" data-action="new-task" type="button"><span>＋</span><b>New task</b><small>Get it out of your head</small></button>
+            <button class="quick-action" data-action="new-note" type="button"><span>✎</span><b>New note</b><small>Save the thought</small></button>
+            <button class="quick-action" data-action="export" type="button"><span>♡</span><b>Backup</b><small>Save everything</small></button>
+            <button class="quick-action" data-action="import" type="button"><span>↥</span><b>Restore</b><small>Bring it back</small></button>
+            <button class="quick-action" data-action="theme" type="button"><span>☾</span><b>Theme</b><small>Set the mood</small></button>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" data-view="tasks" aria-labelledby="tasksTitle">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">TASKS</p>
+            <h1 id="tasksTitle">Todo list</h1>
+          </div>
+          <button class="primary-icon-btn" data-action="new-task" type="button" aria-label="Create task">＋</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="segmented" id="taskFilters" role="tablist" aria-label="Task filters">
+            <button class="segment active" data-filter="all" type="button">All</button>
+            <button class="segment" data-filter="active" type="button">Active</button>
+            <button class="segment" data-filter="completed" type="button">Done</button>
+            <button class="segment" data-filter="high" type="button">High</button>
+            <button class="segment" data-filter="today" type="button">Today</button>
+            <button class="segment" data-filter="upcoming" type="button">Upcoming</button>
+          </div>
+          <div class="toolbar-row">
+            <select id="taskSort" class="select" aria-label="Sort tasks">
+              <option value="date">Due date</option>
+              <option value="priority">Priority</option>
+              <option value="created">Created</option>
+            </select>
+            <button class="icon-btn" id="clearCompleted" type="button" title="Clear completed tasks" aria-label="Clear completed tasks">⌫</button>
+          </div>
+        </div>
+        <div id="tasksList" class="stack-list"></div>
+      </section>
+
+      <section class="view" data-view="notes" aria-labelledby="notesTitle">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">NOTEBOOK</p>
+            <h1 id="notesTitle">Your notes</h1>
+          </div>
+          <button class="primary-icon-btn" data-action="new-note" type="button" aria-label="Create note">＋</button>
+        </div>
+        <div class="toolbar-row note-toolbar">
+          <div class="search-input-wrap grow">
+            <span aria-hidden="true">⌕</span>
+            <input id="notesSearch" type="search" placeholder="Search notes…" autocomplete="off" />
+          </div>
+          <button class="filter-chip" id="notesPinnedFilter" type="button" aria-pressed="false">Pinned</button>
+        </div>
+        <div id="notesGrid" class="notes-grid"></div>
+      </section>
+
+      <section class="view" data-view="favorites" aria-labelledby="favoritesTitle">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">FAVORITES</p>
+            <h1 id="favoritesTitle">Saved for later</h1>
+          </div>
+        </div>
+        <div class="favorites-tabs">
+          <button class="tab-btn active" data-fav-tab="all" type="button">All</button>
+          <button class="tab-btn" data-fav-tab="tasks" type="button">Tasks</button>
+          <button class="tab-btn" data-fav-tab="notes" type="button">Notes</button>
+        </div>
+        <div id="favoritesContent"></div>
+      </section>
+
+      <section class="view" data-view="search" aria-labelledby="searchTitle">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">SEARCH</p>
+            <h1 id="searchTitle">Find anything</h1>
+          </div>
+        </div>
+        <div class="search-input-wrap search-big">
+          <span aria-hidden="true">⌕</span>
+          <input id="globalSearch" type="search" placeholder="Search tasks, notes, tags…" autocomplete="off" />
+        </div>
+        <div id="searchResults"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <button class="nav-item active" data-route="home" type="button"><span>⌂</span><small>Home</small></button>
+      <button class="nav-item" data-route="tasks" type="button"><span>✓</span><small>Tasks</small></button>
+      <button class="nav-item" data-route="notes" type="button"><span>▤</span><small>Notes</small></button>
+      <button class="nav-item" data-route="favorites" type="button"><span>♥</span><small>Favorites</small></button>
+      <button class="nav-item" data-route="search" type="button"><span>⌕</span><small>Search</small></button>
+    </nav>
+  </div>
+
+  <input id="importBackupInput" type="file" accept="application/json,.json" hidden />
+  <div id="modalRoot"></div>
+  <div id="toastRoot" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="js/app.js"></script>
+  <script>window.addEventListener("load",()=>setTimeout(()=>document.getElementById("splashScreen")?.classList.add("hidden"),450));</script>
+</body>
+</html>

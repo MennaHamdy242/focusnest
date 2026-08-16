@@ -1,0 +1,16 @@
+{
+  "name": "FocusNest — Your Pretty Productivity Space",
+  "short_name": "FocusNest",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbf7fb",
+  "theme_color": "#c87998",
+  "orientation": "portrait",
+  "scope": "./",
+  "description": "A feminine, cozy local-first todo and notebook app with photos, voice notes, backup, and offline support.",
+  "lang": "en",
+  "categories": ["productivity", "lifestyle", "utilities"],
+  "icons": [
+    {"src":"icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
